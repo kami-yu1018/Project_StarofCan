@@ -5,6 +5,7 @@
 #include "Project_StarofCan.h"
 
 #include"DirectX.h"
+#include"Key.h"
 
 #define MAX_LOADSTRING 100
 
@@ -82,12 +83,23 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
        /* float color[4] = { 0.2f,0.2f,1.0f,1.0f };
         D3D.m_deviceContext->ClearRenderTargetView(D3D.m_backBufferView.Get(), color);
         D3D.m_swapChain->Present(1, 0);*/
-
-
+        //  キー入力動作確認
+        /*if (CheckHitKey(VK_SPACE))
+        {
+            float color[4] = { 0.2f,0.2f,1.0f,1.0f };
+            D3D.m_deviceContext->ClearRenderTargetView(D3D.m_backBufferView.Get(), color);
+            D3D.m_swapChain->Present(1, 0);
+        }
+        else
+        {
+            float color[4] = { 1.0f,1.0f,1.0f,1.0f };
+            D3D.m_deviceContext->ClearRenderTargetView(D3D.m_backBufferView.Get(), color);
+            D3D.m_swapChain->Present(1, 0);
+        }*/
 
 
     }
-    /*Direct3D::DeleteInstance();*/
+   /* Direct3D::DeleteInstance();*/
 
     return (int) msg.wParam;
 }
@@ -148,8 +160,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    }
 
    //   テスト用
-   //Direct3D::CreateInstance();
-   //D3D.Initalize(hWnd, 1280, 720);
+  /* Direct3D::CreateInstance();
+   D3D.Initalize(hWnd, 1280, 720);*/
 
 
    ShowWindow(hWnd, nCmdShow);

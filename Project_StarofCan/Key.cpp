@@ -2,10 +2,12 @@
 #include<windows.h>
 #include"Key.h"
 
+int key_count = 0;
+
 //	キー押下状態にTRUEを返す
 bool CheckHitKey(int key)
 {
-	if (GetAsyncKeyState(key))
+	if (GetAsyncKeyState(key)&0x8000)
 	{
 		return true;
 	}
@@ -15,18 +17,18 @@ bool CheckHitKey(int key)
 //	キーを押した瞬間にTRUEを返す
 bool PushHitKey(int key)
 {
-	if (GetAsyncKeyState(key))
+	if (GetAsyncKeyState(key)&0x8000)
 	{
-		count++;
+		key_count++;
 	}
 
-	if (count == 1)
+	if (key_count == 1)
 	{
 		return true;
 	}
 	else
 	{
-		count = 0;
+		key_count = 0;
 		return false;
 	}
 }
