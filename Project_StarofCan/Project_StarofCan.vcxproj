@@ -131,7 +131,7 @@
   <ItemGroup>
     <ClInclude Include="DirectX.h" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="key.h" />
+    <ClInclude Include="Key.h" />
     <ClInclude Include="Project_StarofCan.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />

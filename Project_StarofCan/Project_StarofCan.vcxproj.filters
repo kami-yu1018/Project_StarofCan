@@ -32,7 +32,7 @@
     <ClInclude Include="targetver.h">
       <Filter>Source\main</Filter>
     </ClInclude>
-    <ClInclude Include="key.h">
+    <ClInclude Include="Key.h">
       <Filter>Source\setting</Filter>
     </ClInclude>
     <ClInclude Include="DirectX.h">
