@@ -134,8 +134,13 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // グローバル変数にインスタンス ハンドルを格納する
 
+   //   画面解像度を取得
+   int screenW = GetSystemMetrics(SM_CXSCREEN);
+   int screenH = GetSystemMetrics(SM_CYSCREEN);
+
+
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+       0, 0, screenW, screenH, nullptr, nullptr, hInstance, nullptr);
 
    if (!hWnd)
    {
