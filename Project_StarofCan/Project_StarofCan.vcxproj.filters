@@ -1,48 +1,66 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="リソース ファイル">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Source">
+      <UniqueIdentifier>{3f042e1e-be1e-495d-8b6e-cd534d60bd9e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="NewFilter1">
+    <Filter Include="Source\DirectX">
+      <UniqueIdentifier>{6a4aef99-3670-4764-bf64-fe804265479c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\setting">
       <UniqueIdentifier>{93c1fb1d-1cd3-46d5-8149-79673ec0f9f3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="main">
+    <Filter Include="Source\main">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source\リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
-      <Filter>main</Filter>
+      <Filter>Source\main</Filter>
     </ClInclude>
     <ClInclude Include="Project_StarofCan.h">
-      <Filter>main</Filter>
+      <Filter>Source\main</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
-      <Filter>main</Filter>
+      <Filter>Source\main</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
-      <Filter>main</Filter>
+      <Filter>Source\main</Filter>
+    </ClInclude>
+    <ClInclude Include="key.h">
+      <Filter>Source\setting</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX.h">
+      <Filter>Source\DirectX</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Project_StarofCan.cpp">
-      <Filter>main</Filter>
+      <Filter>Source\main</Filter>
+    </ClCompile>
+    <ClCompile Include="Key.cpp">
+      <Filter>Source\setting</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX.cpp">
+      <Filter>Source\DirectX</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Project_StarofCan.rc">
-      <Filter>リソース ファイル</Filter>
+      <Filter>Source\リソース ファイル</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
-      <Filter>リソース ファイル</Filter>
+      <Filter>Source\リソース ファイル</Filter>
     </Image>
     <Image Include="Project_StarofCan.ico">
-      <Filter>リソース ファイル</Filter>
+      <Filter>Source\リソース ファイル</Filter>
     </Image>
   </ItemGroup>
 </Project>
