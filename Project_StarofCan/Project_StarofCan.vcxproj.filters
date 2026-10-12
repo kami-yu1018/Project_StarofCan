@@ -18,6 +18,27 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source\Game">
+      <UniqueIdentifier>{8b0f4d4f-bcba-4911-901b-526b57b30cd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game\Scene">
+      <UniqueIdentifier>{003af692-7ba6-49cc-91b6-78292d4b93dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game\Scene\Config">
+      <UniqueIdentifier>{6d1ca87e-6a73-4bc9-90c8-a2892b91f769}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game\Scene\Title">
+      <UniqueIdentifier>{9bacf1f5-5893-4699-9b05-8112afe02e43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game\Scene\Howto">
+      <UniqueIdentifier>{8095a0bb-0523-497d-a6cf-7d76331afed0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game\Scene\Ingame">
+      <UniqueIdentifier>{b949b22a-ef1c-4bba-84e7-34084e841ad5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game\Scene\Result">
+      <UniqueIdentifier>{9b4ba6c3-e078-4ec8-a9f6-be2b2e332832}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -38,6 +59,27 @@
     <ClInclude Include="DirectX.h">
       <Filter>Source\DirectX</Filter>
     </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneBase.h">
+      <Filter>Source\Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Config.h">
+      <Filter>Source\Game\Scene\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Title.h">
+      <Filter>Source\Game\Scene\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Howto.h">
+      <Filter>Source\Game\Scene\Howto</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Ingame.h">
+      <Filter>Source\Game\Scene\Ingame</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Result.h">
+      <Filter>Source\Game\Scene\Result</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Project_StarofCan.cpp">
@@ -48,6 +90,27 @@
     </ClCompile>
     <ClCompile Include="DirectX.cpp">
       <Filter>Source\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneBase.cpp">
+      <Filter>Source\Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Config.cpp">
+      <Filter>Source\Game\Scene\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Title.cpp">
+      <Filter>Source\Game\Scene\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Howto.cpp">
+      <Filter>Source\Game\Scene\Howto</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Ingame.cpp">
+      <Filter>Source\Game\Scene\Ingame</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Result.cpp">
+      <Filter>Source\Game\Scene\Result</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

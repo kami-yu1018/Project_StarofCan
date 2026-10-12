@@ -131,15 +131,29 @@
   <ItemGroup>
     <ClInclude Include="DirectX.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="Key.h" />
     <ClInclude Include="Project_StarofCan.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="SceneBase.h" />
+    <ClInclude Include="Scene_Config.h" />
+    <ClInclude Include="Scene_Howto.h" />
+    <ClInclude Include="Scene_Ingame.h" />
+    <ClInclude Include="Scene_Result.h" />
+    <ClInclude Include="Scene_Title.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectX.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Key.cpp" />
     <ClCompile Include="Project_StarofCan.cpp" />
+    <ClCompile Include="SceneBase.cpp" />
+    <ClCompile Include="Scene_Config.cpp" />
+    <ClCompile Include="Scene_Ingame.cpp" />
+    <ClCompile Include="Scene_Howto.cpp" />
+    <ClCompile Include="Scene_Result.cpp" />
+    <ClCompile Include="Scene_Title.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Project_StarofCan.rc" />
