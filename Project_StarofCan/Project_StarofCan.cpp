@@ -4,6 +4,8 @@
 #include "framework.h"
 #include "Project_StarofCan.h"
 
+#include"DirectX.h"
+
 #define MAX_LOADSTRING 100
 
 // グローバル変数:
@@ -42,15 +44,50 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     MSG msg;
 
-    // メイン メッセージ ループ:
-    while (GetMessage(&msg, nullptr, 0, 0))
+    //// メイン メッセージ ループ:
+    //while (GetMessage(&msg, nullptr, 0, 0))
+    //{
+    //    if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
+    //    {
+    //        TranslateMessage(&msg);
+    //        DispatchMessage(&msg);
+    //    }
+    //}
+
+    //  ゲームループ
+    while (1)
     {
-        if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
+        if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
         {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
+            //=================================
+            //  ウィンドウメッセージ処理
+            //=================================
+            //  終了メッセージが来た時
+            if (msg.message == WM_QUIT)
+            {
+                break;
+            }
+            else
+            {
+                TranslateMessage(&msg);
+                DispatchMessage(&msg);
+            }
         }
+
+        //=========================================================
+        // 以下にゲームの処理を書く
+        //=========================================================
+
+        //  テスト用　青い画面を表示する処理
+       /* float color[4] = { 0.2f,0.2f,1.0f,1.0f };
+        D3D.m_deviceContext->ClearRenderTargetView(D3D.m_backBufferView.Get(), color);
+        D3D.m_swapChain->Present(1, 0);*/
+
+
+
+
     }
+    /*Direct3D::DeleteInstance();*/
 
     return (int) msg.wParam;
 }
@@ -105,11 +142,17 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
       return FALSE;
    }
 
+   //   テスト用
+   //Direct3D::CreateInstance();
+   //D3D.Initalize(hWnd, 1280, 720);
+
+
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
 
    return TRUE;
 }
+
 
 //
 //  関数: WndProc(HWND, UINT, WPARAM, LPARAM)

@@ -3,9 +3,10 @@
 //	DirectXの実装
 //	ライブラリ読み込み
 #pragma comment(lib,"d3d11.lib")
-#pragma commen(lib,"dggi.lib")
+#pragma comment(lib,"dxgi.lib")
 //	インクルード
 #include<d3d11.h>
+#include<dxgi.h>
 #include<DirectXMath.h>
 //	ComPtrを使用できるように
 #include<wrl/client.h>
@@ -14,6 +15,7 @@ using Microsoft::WRL::ComPtr;
 ///	Direct3Dクラス
 class Direct3D
 {
+public:
 	ComPtr<ID3D11Device>			m_device;			//	デバイス
 	ComPtr<ID3D11DeviceContext>		m_deviceContext;	//	デバイスコンテキスト
 	ComPtr<IDXGISwapChain>			m_swapChain;		//	スワップチェイン
