@@ -7,6 +7,9 @@
 #include"DirectX.h"
 #include"Key.h"
 
+#include"GameManager.h"
+#include"Scene_Title.h"
+
 #define MAX_LOADSTRING 100
 
 // グローバル変数:
@@ -45,15 +48,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     MSG msg;
 
-    //// メイン メッセージ ループ:
-    //while (GetMessage(&msg, nullptr, 0, 0))
-    //{
-    //    if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
-    //    {
-    //        TranslateMessage(&msg);
-    //        DispatchMessage(&msg);
-    //    }
-    //}
+    Direct3D::CreateInstance();
+
+    GameManager manager(std::make_unique<SceneTitle>());
 
     //  ゲームループ
     while (1)
@@ -79,23 +76,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         // 以下にゲームの処理を書く
         //=========================================================
 
-        //  テスト用　青い画面を表示する処理
-       /* float color[4] = { 0.2f,0.2f,1.0f,1.0f };
-        D3D.m_deviceContext->ClearRenderTargetView(D3D.m_backBufferView.Get(), color);
-        D3D.m_swapChain->Present(1, 0);*/
-        //  キー入力動作確認
-        /*if (CheckHitKey(VK_SPACE))
-        {
-            float color[4] = { 0.2f,0.2f,1.0f,1.0f };
-            D3D.m_deviceContext->ClearRenderTargetView(D3D.m_backBufferView.Get(), color);
-            D3D.m_swapChain->Present(1, 0);
-        }
-        else
-        {
-            float color[4] = { 1.0f,1.0f,1.0f,1.0f };
-            D3D.m_deviceContext->ClearRenderTargetView(D3D.m_backBufferView.Get(), color);
-            D3D.m_swapChain->Present(1, 0);
-        }*/
+        manager.Update(1.0f);
 
 
     }
