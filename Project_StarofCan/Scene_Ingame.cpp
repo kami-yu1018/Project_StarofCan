@@ -20,5 +20,5 @@ void SceneIngame::OnExit(GameManager* manager)
 
 const std::string SceneIngame::GetName()const
 {
-
+    return"Ingame";
 }
