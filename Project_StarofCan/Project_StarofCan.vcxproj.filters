@@ -39,6 +39,12 @@
     <Filter Include="Source\Game\Scene\Result">
       <UniqueIdentifier>{9b4ba6c3-e078-4ec8-a9f6-be2b2e332832}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Game\Scene\GameManager">
+      <UniqueIdentifier>{5128749a-604f-44ea-b426-a90a2394cf52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game\Scene\Base">
+      <UniqueIdentifier>{ccf378b0-0db3-4ff4-ba6b-6c9ceedd8d1f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -62,9 +68,6 @@
     <ClInclude Include="Game.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
-    <ClInclude Include="SceneBase.h">
-      <Filter>Source\Game\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Scene_Config.h">
       <Filter>Source\Game\Scene\Config</Filter>
     </ClInclude>
@@ -81,7 +84,10 @@
       <Filter>Source\Game\Scene\Result</Filter>
     </ClInclude>
     <ClInclude Include="GameManager.h">
-      <Filter>Source\Game\Scene</Filter>
+      <Filter>Source\Game\Scene\GameManager</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneBase.h">
+      <Filter>Source\Game\Scene\Base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -96,9 +102,6 @@
     </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Source\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneBase.cpp">
-      <Filter>Source\Game\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Scene_Config.cpp">
       <Filter>Source\Game\Scene\Config</Filter>
@@ -116,7 +119,10 @@
       <Filter>Source\Game\Scene\Result</Filter>
     </ClCompile>
     <ClCompile Include="GameManager.cpp">
-      <Filter>Source\Game\Scene</Filter>
+      <Filter>Source\Game\Scene\GameManager</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneBase.cpp">
+      <Filter>Source\Game\Scene\Base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
