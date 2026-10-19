@@ -48,8 +48,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     MSG msg;
 
-    Direct3D::CreateInstance();
-
     GameManager manager(std::make_unique<SceneTitle>());
 
     //  ゲームループ
@@ -76,11 +74,22 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         // 以下にゲームの処理を書く
         //=========================================================
 
+        //  描画先をクリア
+        float clearColor[4] = { 0.0f,0.0f,0.0f,1.0f };
+
+        D3D.m_deviceContext->ClearRenderTargetView(
+            D3D.m_backBufferView.Get(),
+            clearColor
+        );
+
+        //  画面の更新、描画
         manager.Update(1.0f);
 
+        //  描画結果をウィンドウに表示
+        D3D.m_swapChain->Present(1, 0);
 
     }
-   /* Direct3D::DeleteInstance();*/
+    Direct3D::DeleteInstance();
 
     return (int) msg.wParam;
 }
@@ -141,8 +150,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    }
 
    //   テスト用
-  /* Direct3D::CreateInstance();
-   D3D.Initalize(hWnd, 1280, 720);*/
+  Direct3D::CreateInstance();
+  D3D.Initalize(hWnd, 1280, 720);
 
 
    ShowWindow(hWnd, nCmdShow);

@@ -15,7 +15,7 @@ void SceneTitle::OnEnter(GameManager* manager)
     if (!m_render->Initialize())
         return;
 
-    m_render->LoadTexture("TitleBg", L"data/image/title_bg.png");
+    m_render->LoadTexture("TitleBg", L"../data/image/title_bg.png");    //  ƒQ[ƒ€”wŒi
 }
 
 //  XVˆ—

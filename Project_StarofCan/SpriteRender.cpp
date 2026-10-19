@@ -116,6 +116,6 @@ void SpriteRender::End()
 //  ‰ð•ú
 void SpriteRender::Release()
 {
-    m_spriteBatch.release();
+    m_spriteBatch.reset();
     m_texture.clear();
 }
