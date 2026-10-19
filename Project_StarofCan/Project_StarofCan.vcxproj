@@ -132,6 +132,7 @@
     <ClInclude Include="DirectX.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="Key.h" />
     <ClInclude Include="Project_StarofCan.h" />
     <ClInclude Include="Resource.h" />
@@ -146,6 +147,7 @@
   <ItemGroup>
     <ClCompile Include="DirectX.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Key.cpp" />
     <ClCompile Include="Project_StarofCan.cpp" />
     <ClCompile Include="SceneBase.cpp" />

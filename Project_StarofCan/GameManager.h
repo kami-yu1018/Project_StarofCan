@@ -1,0 +1,16 @@
+#pragma once
+#include<memory>
+
+class SceneBass;
+
+//  ƒQ[ƒ€ŠÇ—ƒNƒ‰ƒX
+class GameManager
+{
+    std::unique_ptr<SceneBass>currentState;
+    bool isRunning;
+    float gameTime;
+public:
+    GameManager(std::unique_ptr<SceneBass>initialState);
+    void ChangeState(std::unique_ptr<SceneBass>newState);
+    void Update(float deltaTime);
+};

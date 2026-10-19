@@ -80,6 +80,9 @@
     <ClInclude Include="Scene_Result.h">
       <Filter>Source\Game\Scene\Result</Filter>
     </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>Source\Game\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Project_StarofCan.cpp">
@@ -111,6 +114,9 @@
     </ClCompile>
     <ClCompile Include="Scene_Result.cpp">
       <Filter>Source\Game\Scene\Result</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>Source\Game\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
