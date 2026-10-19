@@ -45,6 +45,12 @@
     <Filter Include="Source\Game\Scene\Base">
       <UniqueIdentifier>{ccf378b0-0db3-4ff4-ba6b-6c9ceedd8d1f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\setting\Key">
+      <UniqueIdentifier>{51514f49-9c97-42be-ba34-ab2d8d1cd2f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\setting\Draw">
+      <UniqueIdentifier>{c59a1b1c-4a9c-4f9b-851c-cc66d66ad708}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -59,14 +65,8 @@
     <ClInclude Include="targetver.h">
       <Filter>Source\main</Filter>
     </ClInclude>
-    <ClInclude Include="Key.h">
-      <Filter>Source\setting</Filter>
-    </ClInclude>
     <ClInclude Include="DirectX.h">
       <Filter>Source\DirectX</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Source\Game</Filter>
     </ClInclude>
     <ClInclude Include="Scene_Config.h">
       <Filter>Source\Game\Scene\Config</Filter>
@@ -89,19 +89,19 @@
     <ClInclude Include="SceneBase.h">
       <Filter>Source\Game\Scene\Base</Filter>
     </ClInclude>
+    <ClInclude Include="Key.h">
+      <Filter>Source\setting\Key</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteRender.h">
+      <Filter>Source\setting\Draw</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Project_StarofCan.cpp">
       <Filter>Source\main</Filter>
     </ClCompile>
-    <ClCompile Include="Key.cpp">
-      <Filter>Source\setting</Filter>
-    </ClCompile>
     <ClCompile Include="DirectX.cpp">
       <Filter>Source\DirectX</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Source\Game</Filter>
     </ClCompile>
     <ClCompile Include="Scene_Config.cpp">
       <Filter>Source\Game\Scene\Config</Filter>
@@ -124,6 +124,12 @@
     <ClCompile Include="SceneBase.cpp">
       <Filter>Source\Game\Scene\Base</Filter>
     </ClCompile>
+    <ClCompile Include="Key.cpp">
+      <Filter>Source\setting\Key</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteRender.cpp">
+      <Filter>Source\setting\Draw</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Project_StarofCan.rc">
@@ -137,5 +143,8 @@
     <Image Include="Project_StarofCan.ico">
       <Filter>Source\リソース ファイル</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
