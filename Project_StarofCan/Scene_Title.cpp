@@ -22,10 +22,19 @@ void SceneTitle::OnEnter(GameManager* manager)
 void SceneTitle::OnUpdate(GameManager* manager, float deltaTime)
 {
 
+    float screenW = static_cast<float>(D3D.m_screenWidth);
+    float screenH = static_cast<float>(D3D.m_screenHeight);
 
     //  ‰æ‘œ‚Ì•`‰æ
     m_render->Begin();
-    m_render->Draw("TitleBg", 0, 0, 900, 1300);
+
+    float titleBg_W = screenW * 0.33f;
+    float titleBg_H = screenH;
+
+    float titleBg_X = (screenW - titleBg_W) * 0.5f;
+    float titleBg_Y = 0;
+
+    m_render->Draw("TitleBg", titleBg_X, titleBg_Y, titleBg_W, titleBg_H);
     m_render->End();
 
 
