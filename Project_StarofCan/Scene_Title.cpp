@@ -43,7 +43,7 @@ void SceneTitle::OnUpdate(GameManager* manager, float deltaTime)
     float button_alpha[3] = { 0.3f, 0.3f, 0.3f };
     button_alpha[choseMode] = 1.0f;
 
-    if (PushHitKey('UP'))
+    if (PushHitKey(VK_UP))
     {
         choseMode--;
         if (choseMode < 0)
@@ -51,7 +51,7 @@ void SceneTitle::OnUpdate(GameManager* manager, float deltaTime)
             choseMode = 2;
         }
     }
-    if (PushHitKey('DOWN'))
+    if (PushHitKey(VK_DOWN))
     {
         choseMode++;
         if (choseMode > 2)
@@ -60,7 +60,7 @@ void SceneTitle::OnUpdate(GameManager* manager, float deltaTime)
         }
     }
 
-    if (PushHitKey(' '))
+    if (PushHitKey(VK_RETURN))
     {
         switch (choseMode)
         {

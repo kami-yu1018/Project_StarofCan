@@ -17,18 +17,16 @@ bool CheckHitKey(int key)
 //	キーを押した瞬間にTRUEを返す
 bool PushHitKey(int key)
 {
-	if (GetAsyncKeyState(key)&0x8000)
-	{
-		key_count++;
-	}
+    static bool previousKey[256] = {};
 
-	if (key_count == 1)
-	{
-		return true;
-	}
-	else
-	{
-		key_count = 0;
-		return false;
-	}
+    //  現在のキー状態
+    bool current = CheckHitKey(key);
+
+    //  前回は話していた今回押された場合のみ true
+    bool pushed = current && !previousKey[key];
+
+    //  今回の状態を保存
+    previousKey[key] = current;
+
+    return pushed;
 }
