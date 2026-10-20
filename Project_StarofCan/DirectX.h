@@ -16,6 +16,11 @@ using Microsoft::WRL::ComPtr;
 class Direct3D
 {
 public:
+
+    //  スクリーンサイズ
+    int m_screenWidth = 0;
+    int m_screenHeight = 0;
+
 	ComPtr<ID3D11Device>			m_device;			//	デバイス
 	ComPtr<ID3D11DeviceContext>		m_deviceContext;	//	デバイスコンテキスト
 	ComPtr<IDXGISwapChain>			m_swapChain;		//	スワップチェイン

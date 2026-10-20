@@ -7,6 +7,7 @@ class GameManager;
 class SceneBass
 {
 public:
+
     virtual ~SceneBass() = default;
     virtual void OnEnter(GameManager* manager) = 0;
     virtual void OnUpdate(GameManager* manager, float deltaTime) = 0;
