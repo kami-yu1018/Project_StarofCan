@@ -43,6 +43,7 @@ void SceneTitle::OnUpdate(GameManager* manager, float deltaTime)
     float button_alpha[3] = { 0.3f, 0.3f, 0.3f };
     button_alpha[choseMode] = 1.0f;
 
+    //  上下キーで移動したいメニューを選択
     if (PushHitKey(VK_UP))
     {
         choseMode--;
@@ -60,6 +61,7 @@ void SceneTitle::OnUpdate(GameManager* manager, float deltaTime)
         }
     }
 
+    //  エンターで移動
     if (PushHitKey(VK_RETURN))
     {
         switch (choseMode)
