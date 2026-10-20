@@ -32,7 +32,8 @@ public:
         float x,                        //  ‚˜À•W
         float y,                        //  ‚™À•W
         float width,                    //  •
-        float height                    //  ‚‚³
+        float height,                    //  ‚‚³
+        float alpha = 1.0f
     );
     void End();                     //  •`‰æI—¹
     void Release();                 //  “Ç‚İ‚ñ‚¾‰æ‘œ‚ğ‰ğ•ú

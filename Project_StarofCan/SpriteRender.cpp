@@ -61,7 +61,8 @@ void SpriteRender::Draw(
     float x,
     float y,
     float width,
-    float height)
+    float height,
+    float alpha)
 {
     //  m_spriteBatchが空であれば描画しない
     if (!m_spriteBatch)
@@ -89,17 +90,22 @@ void SpriteRender::Draw(
     if (desc.Width == 0 || desc.Height == 0)
         return;
 
+    //  不透明度を0.0~1.0の範囲に制限
+    alpha = (std::max)(0.0f, (std::min)(1.0f, alpha));
+
     //  指定された描画サイズに合わせる
     XMFLOAT2 scale(
         width / static_cast<float>(desc.Width),
         height / static_cast<float>(desc.Height)
     );
 
+    DirectX::XMVECTOR color = DirectX::XMVectorSet(1.0f, 1.0f, 1.0f, alpha);
+
     m_spriteBatch->Draw(
         texture,                //  描画する画像
         XMFLOAT2(x, y),         //  描画位置
         nullptr,                //  画像全体を描画する指定
-        Colors::White,          //  色を白に指定、元画像の色を変えない
+        color,                  //  色を白に指定、元画像の色を変えない
         0.0f,                   //  回転角度（今回は回転しない）
         XMFLOAT2(0.0f, 0.0f),   //  回転、拡大縮小の基準点を左上にする
         scale                   //  横と縦の拡大縮小率

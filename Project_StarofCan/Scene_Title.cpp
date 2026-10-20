@@ -6,6 +6,8 @@
 
 #include"DirectX.h"
 
+#include"key.h"
+
 //  èâä˙âªèà
 void SceneTitle::OnEnter(GameManager* manager)
 {
@@ -36,7 +38,43 @@ void SceneTitle::OnUpdate(GameManager* manager, float deltaTime)
     float buttonH = screenH * 0.1;
 
     float buttonX = (screenW - buttonW) * 0.5f;
-    float buttonY[3] = { screenH * 0.6f,screenH * 0.7f,screenH * 0.8f };
+    float buttonY[3] = { screenH * 0.6f,screenH * 0.73f,screenH * 0.86f };
+
+    float button_alpha[3] = { 0.3f, 0.3f, 0.3f };
+    button_alpha[choseMode] = 1.0f;
+
+    if (PushHitKey('UP'))
+    {
+        choseMode--;
+        if (choseMode < 0)
+        {
+            choseMode = 2;
+        }
+    }
+    if (PushHitKey('DOWN'))
+    {
+        choseMode++;
+        if (choseMode > 2)
+        {
+            choseMode = 0;
+        }
+    }
+
+    if (PushHitKey(' '))
+    {
+        switch (choseMode)
+        {
+        case 0:     //  ÉQÅ[ÉÄÉvÉåÉC
+            manager->ChangeState(std::make_unique<SceneIngame>());
+            break;
+        case 1:     //  óVÇ—ï˚
+            manager->ChangeState(std::make_unique<SceneHowto>());
+            break;
+        case 2:     //  ê›íË
+            manager->ChangeState(std::make_unique<SceneConfig>());
+            break;
+        }
+    }
 
     //  âÊëúÇÃï`âÊ
     m_render->Begin();
@@ -53,9 +91,9 @@ void SceneTitle::OnUpdate(GameManager* manager, float deltaTime)
 
     m_render->Draw("TitleBg", titleBg_X, titleBg_Y, titleBg_W, titleBg_H);
     m_render->Draw("TitleRogo", rogo_X, rogo_Y, rogo_W, rogo_H);
-    m_render->Draw("PlayButton", buttonX, buttonY[0], buttonW, buttonH);
-    m_render->Draw("HowtoButton", buttonX, buttonY[1], buttonW, buttonH);
-    m_render->Draw("ConfigButton", buttonX, buttonY[2], buttonW, buttonH);
+    m_render->Draw("PlayButton", buttonX, buttonY[0], buttonW, buttonH, button_alpha[0]);
+    m_render->Draw("HowtoButton", buttonX, buttonY[1], buttonW, buttonH, button_alpha[1]);
+    m_render->Draw("ConfigButton", buttonX, buttonY[2], buttonW, buttonH, button_alpha[2]);
 
     m_render->End();
 

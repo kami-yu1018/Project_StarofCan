@@ -10,6 +10,15 @@ class SceneTitle :public SceneBass
     // ‰æ‘œ•`‰æƒNƒ‰ƒX‚ÌŒÄ‚Ño‚µ
     std::unique_ptr<SpriteRender>m_render;
 
+    enum
+    {
+        MODE_PLAY,
+        MODE_HOWTO,
+        MODE_CONFIG
+    };
+
+    int choseMode = MODE_PLAY;
+
 public:
     void OnEnter(GameManager* manager);
     void OnUpdate(GameManager* manager, float deltaTime);
