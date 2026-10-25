@@ -6,6 +6,10 @@ bool Direct3D::Initalize(HWND hWnd, int width, int height)
     m_screenWidth = width;
     m_screenHeight = height;
 
+    //  ゲーム画面サイズ変更（縦はスクリーンと同じ、横はスクリーンの３分の１）
+    gameWidth = D3D.m_screenWidth / 3.0f;
+    gameHeight = static_cast<float>(D3D.m_screenHeight);
+
 	///---------------------------------------------------------------------------
 	///	ファクトリー作成
 	///---------------------------------------------------------------------------

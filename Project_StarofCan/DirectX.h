@@ -21,6 +21,10 @@ public:
     int m_screenWidth = 0;
     int m_screenHeight = 0;
 
+    //  ゲーム画面サイズ
+    float gameWidth = 0;
+    float gameHeight = 0;
+
 	ComPtr<ID3D11Device>			m_device;			//	デバイス
 	ComPtr<ID3D11DeviceContext>		m_deviceContext;	//	デバイスコンテキスト
 	ComPtr<IDXGISwapChain>			m_swapChain;		//	スワップチェイン
