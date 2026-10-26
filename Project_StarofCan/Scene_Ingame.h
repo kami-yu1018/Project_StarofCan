@@ -34,10 +34,17 @@ class SceneIngame :public SceneBass
     float jumpSpd = 0.0f;               //  ジャンプ速度
     bool isJumping = false;             //  ジャンプ中かどうか
 
-    const float JUMP_POWER = 10.0f;    //  ジャンプ開始時の上向きの力
-    const float GRAVITY = 1.0f;      //  重力
+    const float JUMP_POWER = 10.0f;     //  ジャンプ開始時の上向きの力
+    const float GRAVITY = 1.0f;         //  重力
 
     float cameraOffsetY = 0.0f;         //  カメラ移動量
+
+    //  缶の物理情報
+    float canVelocityY = 0.0f;          //  上下速度
+    bool canLaunched = false;           //  缶が蹴られたかどうか
+    
+    const float CAN_KICK_POWER = 50.0f; //  缶を蹴った時の力
+    const float CAN_GRAVITY = 1.0f;     //  缶にかかる重力
 
 public:
     void OnEnter(GameManager* manager);
@@ -45,5 +52,7 @@ public:
     void OnExit(GameManager* manager);
     const std::string GetName()const;
 
-    void Jump(float deltaTime);
+    void Jump(float deltaTime);     //  プレイヤーのジャンプ処理
+    bool CheckPlayerCanCollision(float canScreenY); //  プレイヤーと缶の当たり判定
+
 };

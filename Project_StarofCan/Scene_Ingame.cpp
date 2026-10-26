@@ -55,12 +55,30 @@ void SceneIngame::OnUpdate(GameManager* manager, float deltaTime)
     }
 
     //  ジャンプ
-    if (CheckHitKey(VK_SPACE))
+    if (PushHitKey(VK_SPACE))
     {
         jumpSpd += JUMP_POWER;
         isJumping = true;
     }
-    if(isJumping) Jump(deltaTime);
+    if(isJumping) Jump(deltaTime);  //  ジャンプ処理
+
+    //  カメラを反映した缶の画面座標
+    float canScreenY = canPos_y + cameraOffsetY;
+    //  プレイヤーと缶の当たり判定
+    if (!canLaunched &&
+        CheckPlayerCanCollision(canScreenY))
+    {
+        //  缶を蹴り上げる処理
+        canVelocityY = CAN_KICK_POWER;
+        
+    }
+    //  重力によって上昇速度を減少させる
+    canVelocityY -= CAN_GRAVITY * deltaTime;
+
+    //  上向きの速度が正なら缶は上昇、負なら落下
+    canPos_y -= canVelocityY * deltaTime;
+    
+
 
     //  画像の描画
     m_render->Begin();
@@ -110,3 +128,26 @@ void SceneIngame::Jump(float deltaTime)
     
 }
 //  プレイヤーと缶の当たり判定
+bool SceneIngame::CheckPlayerCanCollision(float canScreenY)
+{
+    //  プレイヤーの矩形
+    float playerLeft = playerPos_x;
+    float playerRight = playerPos_x + playerWidth;
+    float playerTop = playerPos_y;
+    float playerBottom = playerPos_y + playerHeight;
+    //  缶の矩形
+    float canLeft = canPos_x;
+    float canRight = canPos_x + canWidth;
+    float canTop = canScreenY;
+    float canBottom = canScreenY + canHeight;
+
+    //  プレイヤーと缶の矩形が重なっているか判定
+    if (playerRight > canLeft &&
+        playerLeft<canRight &&
+        playerBottom>canTop &&
+        playerTop < canBottom)
+    {
+        return true;
+    }
+    return false;
+}
