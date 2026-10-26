@@ -57,16 +57,14 @@ void SceneIngame::OnUpdate(GameManager* manager, float deltaTime)
     //  ジャンプ
     if (PushHitKey(VK_SPACE))
     {
-        jumpSpd += JUMP_POWER;
+        jumpSpd = JUMP_POWER;
         isJumping = true;
     }
     if(isJumping) Jump(deltaTime);  //  ジャンプ処理
 
-    //  カメラを反映した缶の画面座標
-    float canScreenY = canPos_y + cameraOffsetY;
     //  プレイヤーと缶の当たり判定
     if (!canLaunched &&
-        CheckPlayerCanCollision(canScreenY))
+        CheckPlayerCanCollision())
     {
         //  缶を蹴り上げる処理
         canVelocityY = CAN_KICK_POWER;
@@ -109,26 +107,43 @@ void SceneIngame::Jump(float deltaTime)
     //  ジャンプの高さを更新
     jumpHeight += jumpSpd * deltaTime;
    
-    //  プレイヤーが上へ移動する
-    playerPos_y -= jumpHeight;
-    //  中央で止めてその後は背景を動かすようにする
-    if (playerPos_y < D3D.gameHeight * 0.5f)
-    {
-        playerPos_y = D3D.gameHeight * 0.5f;
-        //  カメラ移動量をジャンプの高さに合わせる
-        cameraOffsetY = jumpHeight;
-    }
     //  プレイヤーが地面があった場所についたらそのまま下にいかないように止める
-        //  要修正（着いた後、ジャンプができない）
-    else if (playerPos_y > D3D.gameHeight * 0.8)
+    if (jumpHeight <= 0.0f && jumpSpd <= 0.0f)
     {
+        jumpHeight = 0.0f;
+        jumpSpd = 0.0f;
+
+        isJumping = false;
+
         playerPos_y = D3D.gameHeight * 0.8f;
+
+        cameraOffsetY = 0.0f;
+        
+        return;
     }
 
+    //  プレイヤーの初期座標を基準に画面上の座標を計算する
+    float groundY = D3D.gameHeight * 0.8f;
+    float centerY = D3D.gameHeight * 0.5f;
+
+    //  プレイヤーが上昇する
+    playerPos_y = groundY - jumpHeight;
+  
+    //  中央で止めてその後は背景を動かすようにする
+    if (playerPos_y < centerY)
+    {
+        playerPos_y = centerY;
+        //  カメラ移動量をジャンプの高さに合わせる
+        cameraOffsetY = jumpHeight ;
+    }
+    else
+    {
+        cameraOffsetY = 0.0f;
+    }
     
 }
 //  プレイヤーと缶の当たり判定
-bool SceneIngame::CheckPlayerCanCollision(float canScreenY)
+bool SceneIngame::CheckPlayerCanCollision()
 {
     //  プレイヤーの矩形
     float playerLeft = playerPos_x;
@@ -138,8 +153,8 @@ bool SceneIngame::CheckPlayerCanCollision(float canScreenY)
     //  缶の矩形
     float canLeft = canPos_x;
     float canRight = canPos_x + canWidth;
-    float canTop = canScreenY;
-    float canBottom = canScreenY + canHeight;
+    float canTop = canPos_y;
+    float canBottom = canPos_y + canHeight;
 
     //  プレイヤーと缶の矩形が重なっているか判定
     if (playerRight > canLeft &&
