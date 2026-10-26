@@ -3,7 +3,7 @@
 
 //  コンストラクタ作動時にcurrentStateを初期化
 GameManager::GameManager(std::unique_ptr<SceneBass>initialState)
-    :isRunning(true),gameTime(0.0f),currentState(std::move(initialState))
+    :isRunning(true),deltaTime(0.0f),currentState(std::move(initialState))
 {
     currentState->OnEnter(this);
 }
@@ -17,7 +17,7 @@ void GameManager::ChangeState(std::unique_ptr<SceneBass>newState)
 //  更新
 void GameManager::Update(float deltaTime)
 {
-    gameTime += deltaTime;
+    deltaTime += deltaTime;
     //  現在のシーンの更新を最後まで実行
     if (currentState)
     {

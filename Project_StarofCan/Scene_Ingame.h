@@ -29,9 +29,21 @@ class SceneIngame :public SceneBass
     float canWidth = 0;         //  缶
     float canHeight = 0;
 
+    //  ジャンプ関連
+    float jumpHeight = 0.0f;            //  ジャンプ中の高さ
+    float jumpSpd = 0.0f;               //  ジャンプ速度
+    bool isJumping = false;             //  ジャンプ中かどうか
+
+    const float JUMP_POWER = 10.0f;    //  ジャンプ開始時の上向きの力
+    const float GRAVITY = 1.0f;      //  重力
+
+    float cameraOffsetY = 0.0f;         //  カメラ移動量
+
 public:
     void OnEnter(GameManager* manager);
     void OnUpdate(GameManager* manager, float deltaTime);
     void OnExit(GameManager* manager);
     const std::string GetName()const;
+
+    void Jump(float deltaTime);
 };

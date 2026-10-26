@@ -26,6 +26,19 @@ void SceneIngame::OnEnter(GameManager* manager)
     canWidth = D3D.gameWidth * 0.08;
     canHeight = D3D.gameHeight * 0.08;
 
+    //  初期座標設定
+    playerPos_x = D3D.m_screenWidth / 3.0f + (D3D.gameWidth * 0.5f);
+    playerPos_y = D3D.gameHeight * 0.8;
+
+    canPos_x = D3D.m_screenWidth / 3.0f + (D3D.gameWidth * 0.6f);
+    canPos_y = D3D.gameHeight * 0.8;
+
+    //  ジャンプ関連
+    jumpHeight = 0.0f;
+    jumpSpd = 0.0f;
+    isJumping = false;
+    cameraOffsetY = 0.0f;
+
 }
 //  更新処理
 void SceneIngame::OnUpdate(GameManager* manager, float deltaTime)
@@ -42,16 +55,17 @@ void SceneIngame::OnUpdate(GameManager* manager, float deltaTime)
     }
 
     //  ジャンプ
-    if (CheckHitKey(VK_SPACE))
+    if (CheckHitKey(VK_SPACE)&&!isJumping)
     {
-
+        jumpSpd += JUMP_POWER;
+        isJumping = true;
     }
-
+    if(isJumping) Jump(deltaTime);
 
     //  画像の描画
     m_render->Begin();
 
-    m_render->Draw("BgImg", D3D.m_screenWidth / 3.0f, 0, D3D.gameWidth, D3D.gameHeight);
+    m_render->Draw("BgImg", D3D.m_screenWidth / 3.0f, cameraOffsetY, D3D.gameWidth, D3D.gameHeight);
     m_render->Draw("PlayerImg", playerPos_x, playerPos_y, playerWidth, playerHeight);
     m_render->Draw("CanImg", canPos_x, canPos_y, canWidth, canHeight);
 
@@ -69,5 +83,16 @@ const std::string SceneIngame::GetName()const
 }
 
 //  ジャンプの処理
+void SceneIngame::Jump(float deltaTime)
+{
+    //  重力によってジャンプ速度を減少
+    jumpSpd -= GRAVITY * deltaTime;
 
+    //  ジャンプの高さを更新
+    jumpHeight += jumpSpd * deltaTime;
+   
+
+    //  カメラ移動量をジャンプの高さに合わせる
+    cameraOffsetY = jumpHeight;
+}
 //  プレイヤーと缶の当たり判定

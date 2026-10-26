@@ -10,7 +10,7 @@ class GameManager
     std::unique_ptr<SceneBass>nextState;
 
     bool isRunning;
-    float gameTime;
+    float deltaTime;
 public:
     GameManager(std::unique_ptr<SceneBass>initialState);
 
