@@ -67,16 +67,33 @@ void SceneIngame::OnUpdate(GameManager* manager, float deltaTime)
         CheckPlayerCanCollision())
     {
         //  缶を蹴り上げる処理
-        canVelocityY = CAN_KICK_POWER;
+        canVelocityY = CAN_KICK_POWER_UD;
+
+        if(CheckPlayerCanCollision()==RIGHT)
+        {
+            canVelocityX = CAN_KICK_POWER_LR;
+        }
+        else if (CheckPlayerCanCollision() == LEFT)
+        {
+            canVelocityX = CAN_KICK_POWER_LR * -1.0f;
+        }
         
     }
     //  重力によって上昇速度を減少させる
     canVelocityY -= CAN_GRAVITY * deltaTime;
-
     //  上向きの速度が正なら缶は上昇、負なら落下
     canPos_y -= canVelocityY * deltaTime;
     
-
+    //  時間によって左右移動速度を減少させる
+    canVelocityX /= deltaTime;
+    //  正なら右向き、負なら左向きに移動
+    canPos_x += canVelocityX;
+    //  画面端に行ったら跳ね返る
+    if (canPos_x < D3D.m_screenWidth / 3.0f || 
+        canPos_x+canWidth> D3D.m_screenWidth / 3.0f+D3D.gameWidth)
+    {
+        canVelocityX *= -1.0f;
+    }
 
     //  画像の描画
     m_render->Begin();
@@ -90,7 +107,7 @@ void SceneIngame::OnUpdate(GameManager* manager, float deltaTime)
 //  終了処理
 void SceneIngame::OnExit(GameManager* manager)
 {
-
+    m_render->Release();
 }
 
 const std::string SceneIngame::GetName()const
@@ -143,7 +160,7 @@ void SceneIngame::Jump(float deltaTime)
     
 }
 //  プレイヤーと缶の当たり判定
-bool SceneIngame::CheckPlayerCanCollision()
+int SceneIngame::CheckPlayerCanCollision()
 {
     //  プレイヤーの矩形
     float playerLeft = playerPos_x;
@@ -158,11 +175,18 @@ bool SceneIngame::CheckPlayerCanCollision()
 
     //  プレイヤーと缶の矩形が重なっているか判定
     if (playerRight > canLeft &&
+        playerLeft<canRight/2 &&
+        playerBottom>canTop &&
+        playerTop < canBottom)
+    {
+        return RIGHT;
+    }
+    if (playerRight > canLeft/2 &&
         playerLeft<canRight &&
         playerBottom>canTop &&
         playerTop < canBottom)
     {
-        return true;
+        return LEFT;
     }
     return false;
 }

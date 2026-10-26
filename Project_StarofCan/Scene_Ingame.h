@@ -41,9 +41,11 @@ class SceneIngame :public SceneBass
 
     //  缶の物理情報
     float canVelocityY = 0.0f;          //  上下速度
+    float canVelocityX = 0.0f;
     bool canLaunched = false;           //  缶が蹴られたかどうか
     
-    const float CAN_KICK_POWER = 30.0f; //  缶を蹴った時の力
+    const float CAN_KICK_POWER_UD = 30.0f; //  缶を蹴った時の力
+    const float CAN_KICK_POWER_LR = 10.0f;
     const float CAN_GRAVITY = 1.0f;     //  缶にかかる重力
 
 public:
@@ -53,6 +55,12 @@ public:
     const std::string GetName()const;
 
     void Jump(float deltaTime);     //  プレイヤーのジャンプ処理
-    bool CheckPlayerCanCollision(); //  プレイヤーと缶の当たり判定
+
+    enum
+    {
+        RIGHT,
+        LEFT,
+    };
+    int CheckPlayerCanCollision(); //  プレイヤーと缶の当たり判定
 
 };
