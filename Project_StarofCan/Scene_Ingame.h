@@ -63,4 +63,5 @@ public:
     };
     int CheckPlayerCanCollision(); //  ƒvƒŒƒCƒ„[‚ÆŠÊ‚Ì“–‚½‚è”»’è
 
+    bool GameOver();
 };

@@ -95,6 +95,14 @@ void SceneIngame::OnUpdate(GameManager* manager, float deltaTime)
         canVelocityX *= -1.0f;
     }
 
+    
+
+    //  缶が画面下へ落ちたらゲームオーバー
+    if (GameOver())
+    {
+        manager->ChangeState(std::make_unique<SceneResult>());
+    }
+
     //  画像の描画
     m_render->Begin();
 
@@ -200,4 +208,14 @@ int SceneIngame::CheckPlayerCanCollision()
     {
         return LEFT;
     }
+}
+//  ゲームオーバー処理
+bool SceneIngame::GameOver()
+{
+    //  缶が画面下に落ちたらゲームオーバー
+    if (canPos_y > D3D.gameHeight)
+    {
+        return true;
+    }
+    return false;
 }
