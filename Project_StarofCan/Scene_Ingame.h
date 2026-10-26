@@ -34,8 +34,8 @@ class SceneIngame :public SceneBass
     float jumpSpd = 0.0f;               //  ジャンプ速度
     bool isJumping = false;             //  ジャンプ中かどうか
 
-    const float JUMP_POWER = 20.0f;     //  ジャンプ開始時の上向きの力
-    const float GRAVITY = 1.0f;         //  重力
+    const float JUMP_POWER = 15.0f;     //  ジャンプ開始時の上向きの力
+    const float GRAVITY = 0.5f;         //  重力
 
     float cameraOffsetY = 0.0f;         //  カメラ移動量
 
@@ -44,9 +44,9 @@ class SceneIngame :public SceneBass
     float canVelocityX = 0.0f;
     bool canLaunched = false;           //  缶が蹴られたかどうか
     
-    const float CAN_KICK_POWER_UD = 30.0f; //  缶を蹴った時の力
-    const float CAN_KICK_POWER_LR = 10.0f;
-    const float CAN_GRAVITY = 1.0f;     //  缶にかかる重力
+    const float CAN_KICK_POWER_UD = 20.0f; //  缶を蹴った時の力
+    const float CAN_KICK_POWER_LR = 5.0f;
+    const float CAN_GRAVITY = 0.5f;     //  缶にかかる重力
 
 public:
     void OnEnter(GameManager* manager);

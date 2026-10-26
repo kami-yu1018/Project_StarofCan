@@ -141,7 +141,7 @@ void SceneIngame::Jump(float deltaTime)
 
     //  プレイヤーの初期座標を基準に画面上の座標を計算する
     float groundY = D3D.gameHeight * 0.8f;
-    float centerY = D3D.gameHeight * 0.5f;
+    float centerY = D3D.gameHeight * 0.7f;
 
     //  プレイヤーが上昇する
     playerPos_y = groundY - jumpHeight;
