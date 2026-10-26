@@ -55,7 +55,7 @@ void SceneIngame::OnUpdate(GameManager* manager, float deltaTime)
     }
 
     //  ジャンプ
-    if (CheckHitKey(VK_SPACE)&&!isJumping)
+    if (CheckHitKey(VK_SPACE))
     {
         jumpSpd += JUMP_POWER;
         isJumping = true;
@@ -91,8 +91,22 @@ void SceneIngame::Jump(float deltaTime)
     //  ジャンプの高さを更新
     jumpHeight += jumpSpd * deltaTime;
    
+    //  プレイヤーが上へ移動する
+    playerPos_y -= jumpHeight;
+    //  中央で止めてその後は背景を動かすようにする
+    if (playerPos_y < D3D.gameHeight * 0.5f)
+    {
+        playerPos_y = D3D.gameHeight * 0.5f;
+        //  カメラ移動量をジャンプの高さに合わせる
+        cameraOffsetY = jumpHeight;
+    }
+    //  プレイヤーが地面があった場所についたらそのまま下にいかないように止める
+        //  要修正（着いた後、ジャンプができない）
+    else if (playerPos_y > D3D.gameHeight * 0.8)
+    {
+        playerPos_y = D3D.gameHeight * 0.8f;
+    }
 
-    //  カメラ移動量をジャンプの高さに合わせる
-    cameraOffsetY = jumpHeight;
+    
 }
 //  プレイヤーと缶の当たり判定

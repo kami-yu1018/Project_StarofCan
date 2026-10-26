@@ -17,7 +17,7 @@ void GameManager::ChangeState(std::unique_ptr<SceneBass>newState)
 //  更新
 void GameManager::Update(float deltaTime)
 {
-    deltaTime += deltaTime;
+    
     //  現在のシーンの更新を最後まで実行
     if (currentState)
     {
