@@ -7,9 +7,14 @@ class GameManager;
 //  ゲーム画面
 class SceneIngame :public SceneBass
 {
+    //  定数
+#define PLAYERSPEEDLR 3.0f
+
     //  画像描画クラス呼び出し
     std::unique_ptr<SpriteRender>m_render;
-   
+  
+    //  到達点
+
     //  座標
     float playerPos_x = 0;      //  プレイヤー
     float playerPos_y = 0;

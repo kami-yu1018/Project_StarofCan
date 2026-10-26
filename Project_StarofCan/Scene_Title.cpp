@@ -81,7 +81,7 @@ void SceneTitle::OnUpdate(GameManager* manager, float deltaTime)
     //  ‰æ‘œ‚Ì•`‰æ
     m_render->Begin();
 
-    float titleBg_W = screenW * 0.33f;
+    float titleBg_W = screenW / 3.0f;
     float titleBg_H = screenH;
     float titleBg_X = (screenW - titleBg_W) * 0.5f;
     float titleBg_Y = 0;
