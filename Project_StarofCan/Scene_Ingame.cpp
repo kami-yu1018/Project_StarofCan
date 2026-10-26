@@ -63,21 +63,21 @@ void SceneIngame::OnUpdate(GameManager* manager, float deltaTime)
     if(isJumping) Jump(deltaTime);  //  ジャンプ処理
 
     //  プレイヤーと缶の当たり判定
+    int collsionDirection = CheckPlayerCanCollision();
     if (!canLaunched &&
-        CheckPlayerCanCollision())
+        collsionDirection != -1)
     {
         //  缶を蹴り上げる処理
         canVelocityY = CAN_KICK_POWER_UD;
 
-        if(CheckPlayerCanCollision()==RIGHT)
+        if(collsionDirection == RIGHT)
         {
             canVelocityX = CAN_KICK_POWER_LR;
         }
-        else if (CheckPlayerCanCollision() == LEFT)
+        else if (collsionDirection == LEFT)
         {
             canVelocityX = CAN_KICK_POWER_LR * -1.0f;
         }
-        
     }
     //  重力によって上昇速度を減少させる
     canVelocityY -= CAN_GRAVITY * deltaTime;
@@ -174,19 +174,30 @@ int SceneIngame::CheckPlayerCanCollision()
     float canBottom = canPos_y + canHeight;
 
     //  プレイヤーと缶の矩形が重なっているか判定
-    if (playerRight > canLeft &&
-        playerLeft<canRight/2 &&
-        playerBottom>canTop &&
-        playerTop < canBottom)
+    bool isColliding = 
+        playerRight > canLeft &&
+        playerLeft < canRight &&
+        playerBottom > canTop &&
+        playerTop < canBottom;
+    
+    //  重なっていなければ当たり判定なし
+    if (!isColliding)
+    {
+        return -1;
+    }
+
+    //  プレイヤーと缶の中央座標
+    float playerCenterX = playerPos_x + playerWidth / 2.0f;
+    float canCenterX = canPos_x + canWidth / 2.0f;
+
+    //  プレイヤーが缶の右側にいれば左へ飛ばす
+    if (playerCenterX > canCenterX)
     {
         return RIGHT;
     }
-    if (playerRight > canLeft/2 &&
-        playerLeft<canRight &&
-        playerBottom>canTop &&
-        playerTop < canBottom)
+    //  プレイヤーが缶の左側にいれば右へ飛ばす
+    else
     {
         return LEFT;
     }
-    return false;
 }

@@ -8,7 +8,7 @@ class GameManager;
 class SceneIngame :public SceneBass
 {
     //  ’è”
-#define PLAYERSPEEDLR 3.0f
+#define PLAYERSPEEDLR 5.0f
 
     //  ‰æ‘œ•`‰æƒNƒ‰ƒXŒÄ‚Ño‚µ
     std::unique_ptr<SpriteRender>m_render;
