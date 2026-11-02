@@ -14,7 +14,7 @@ void SceneIngame::OnEnter(GameManager* manager)
     if (!m_render->Initialize())
         return;
 
-    m_render->LoadTexture("BgImg", L"../data/image/title_bg.png");    //  背景（仮）
+    m_render->LoadTexture("BgImg", L"../data/image/ingame_bg.png");    //  背景（仮）
     //  プレイヤー
     m_render->LoadTexture("PlayerImg", L"../data/image/player.png");      //  待機状態画像
     m_render->LoadTexture("PlayerJumpImg", L"../data/image/player_jump.png");    //  ジャンプ状態画像
@@ -43,6 +43,24 @@ void SceneIngame::OnEnter(GameManager* manager)
     jumpSpd = 0.0f;
     isJumping = false;
     cameraOffsetY = 0.0f;
+
+    //  累積高度
+    totalHeight = 0.0f;
+    //  カメラ位置
+    cameraOffsetY = 0.0f;
+
+    //  缶の物理情報
+    canVelocityX = 0.0f;
+    canVelocityY = 0.0f;
+    canLaunched = false;
+
+    //  プレイヤーのジャンプ状態
+    jumpHeight = 0.0f;
+    jumpSpd = 0.f;
+    isJumping = false;
+
+    //  プレイヤー状態
+    playerState = PLAYER_STATE_IDLE;
 
 }
 //  更新処理
@@ -92,8 +110,10 @@ void SceneIngame::OnUpdate(GameManager* manager, float deltaTime)
         kickAnimaFlame--;
     }
 
+    //  プレイヤーの累積高度に応じた重力を取得
+    float canGravity = GetGravity(totalHeight);
     //  重力によって上昇速度を減少させる
-    canVelocityY -= CAN_GRAVITY * deltaTime;
+    canVelocityY -= canGravity * deltaTime;
     //  上向きの速度が正なら缶は上昇、負なら落下
     canPos_y -= canVelocityY * deltaTime;
     
@@ -141,7 +161,9 @@ void SceneIngame::OnUpdate(GameManager* manager, float deltaTime)
     //  画像の描画
     m_render->Begin();
 
-    m_render->Draw("BgImg", D3D.m_screenWidth / 3.0f, cameraOffsetY, D3D.gameWidth, D3D.gameHeight);
+    //  背景画像の下端ををゲーム画面の下端に合わせる
+    float bgPosY = D3D.gameHeight - BG_IMAGE_H + cameraOffsetY;
+    m_render->Draw("BgImg", D3D.m_screenWidth / 3.0f, bgPosY, D3D.gameWidth, BG_IMAGE_H);
 
     //  プレイヤーの状態から描画する画像を切り替える
     switch (playerState)
@@ -181,11 +203,23 @@ const std::string SceneIngame::GetName()const
 //  ジャンプの処理
 void SceneIngame::Jump(float deltaTime)
 {
+    //  現在のジャンプ高度を葉損
+    float previousHeight = jumpHeight;;
+
+    //  累積高度に応じた重力を取得
+    float gravity = GetGravity(totalHeight);
+
     //  重力によってジャンプ速度を減少
-    jumpSpd -= GRAVITY * deltaTime;
+    jumpSpd -= gravity * deltaTime;
 
     //  ジャンプの高さを更新
     jumpHeight += jumpSpd * deltaTime;
+
+    //  上昇分だけ累積高度を増加
+    if (jumpHeight > previousHeight)
+    {
+        totalHeight += jumpHeight - previousHeight;
+    }
    
     //  プレイヤーが地面があった場所についたらそのまま下にいかないように止める
     if (jumpHeight <= 0.0f && jumpSpd <= 0.0f)
@@ -264,6 +298,31 @@ int SceneIngame::CheckPlayerCanCollision()
         return LEFT;
     }
 }
+
+//  高度に応じた重力を取得
+float SceneIngame::GetGravity(float height)
+{
+    //  地球から宇宙まで
+    if (height < EARTH_TO_SPACE_HEIGHT)
+    {
+        float t = height / EARTH_TO_SPACE_HEIGHT;
+
+        return EARTH_GRAVITY + (SPACE_GRAVITY - EARTH_GRAVITY) * t;
+    }
+
+    //  宇宙から銀河系まで
+    if (height < SPACE_TO_GALAXY_HEIGHT)
+    {
+        float t = (height - EARTH_TO_SPACE_HEIGHT) /
+            (SPACE_TO_GALAXY_HEIGHT - EARTH_TO_SPACE_HEIGHT);
+
+        return SPACE_GRAVITY + (GALAXY_GRAVITY - SPACE_GRAVITY) * t;
+    }
+
+    //  銀河系以上
+    return GALAXY_GRAVITY;
+}
+
 //  ゲームオーバー処理
 bool SceneIngame::GameOver()
 {
