@@ -10,6 +10,13 @@ class SceneIngame :public SceneBass
     //  定数
 #define PLAYERSPEEDLR 5.0f
 
+#define PLAYER_IMAGE_W 75
+#define PLAYER_IMAGE_H 75
+
+#define CAN_IMAGE_W 75
+#define CAN_IMAGE_H 75
+
+
     //  画像描画クラス呼び出し
     std::unique_ptr<SpriteRender>m_render;
   
@@ -18,6 +25,18 @@ class SceneIngame :public SceneBass
     //  座標
     float playerPos_x = 0;      //  プレイヤー
     float playerPos_y = 0;
+
+    //  プレイヤーの状態
+    enum
+    {
+        PLAYER_STATE_IDLE,
+        PLAYER_STATE_JUMP,
+        PLAYER_STATE_FALL,
+        PLAYER_STATE_KICK,
+    };
+    int playerState = PLAYER_STATE_IDLE;
+
+    int kickAnimaFlame = 0;     //  蹴るアニメーションのフレーム数
 
     float canPos_x = 0;         //  缶
     float canPos_y = 0;

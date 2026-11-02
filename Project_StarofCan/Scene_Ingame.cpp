@@ -15,16 +15,21 @@ void SceneIngame::OnEnter(GameManager* manager)
         return;
 
     m_render->LoadTexture("BgImg", L"../data/image/title_bg.png");    //  背景（仮）
-    m_render->LoadTexture("PlayerImg", L"../data/image/player.png");    //  プレイヤー
+    //  プレイヤー
+    m_render->LoadTexture("PlayerImg", L"../data/image/player.png");      //  待機状態画像
+    m_render->LoadTexture("PlayerJumpImg", L"../data/image/player_jump.png");    //  ジャンプ状態画像
+    m_render->LoadTexture("PlayerFallImg", L"../data/image/player_fall.png");   // 落下状態画像
+    m_render->LoadTexture("PlayerKickImg", L"../data/image/player_kick.png");   //  蹴る状態画像
+
     m_render->LoadTexture("CanImg", L"../data/image/can.png");          //  缶
 
     //  サイズ設定
     //  プレイヤー
-    playerWidth = D3D.gameWidth * 0.12f;
-    playerHeight = D3D.gameHeight * 0.12f;
+    playerWidth = PLAYER_IMAGE_W;
+    playerHeight = PLAYER_IMAGE_H;
     //  缶
-    canWidth = D3D.gameWidth * 0.08;
-    canHeight = D3D.gameHeight * 0.08;
+    canWidth = CAN_IMAGE_W;
+    canHeight = CAN_IMAGE_H;
 
     //  初期座標設定
     playerPos_x = D3D.m_screenWidth / 3.0f + (D3D.gameWidth * 0.5f);
@@ -69,6 +74,7 @@ void SceneIngame::OnUpdate(GameManager* manager, float deltaTime)
     {
         //  缶を蹴り上げる処理
         canVelocityY = CAN_KICK_POWER_UD;
+        kickAnimaFlame = 10;    //  蹴るアニメーションのフレーム数を設定
 
         if(collsionDirection == RIGHT)
         {
@@ -79,6 +85,13 @@ void SceneIngame::OnUpdate(GameManager* manager, float deltaTime)
             canVelocityX = CAN_KICK_POWER_LR * -1.0f;
         }
     }
+
+    //  アニメーションのフレーム数を減少させる
+    if (kickAnimaFlame > 0)
+    {
+        kickAnimaFlame--;
+    }
+
     //  重力によって上昇速度を減少させる
     canVelocityY -= CAN_GRAVITY * deltaTime;
     //  上向きの速度が正なら缶は上昇、負なら落下
@@ -95,7 +108,29 @@ void SceneIngame::OnUpdate(GameManager* manager, float deltaTime)
         canVelocityX *= -1.0f;
     }
 
-    
+    //  プレイヤーの状態更新（要修正）
+    if (!isJumping) //  ジャンプ中でない（地面についている）状態であれば
+    {
+        playerState = PLAYER_STATE_IDLE;
+    }
+    else
+    {
+        if (kickAnimaFlame == 0)
+        {
+            if (canVelocityY > 0.0f)
+            {
+                playerState = PLAYER_STATE_JUMP;
+            }
+            else
+            {
+                playerState = PLAYER_STATE_FALL;
+            }
+        }
+        else
+        {
+            playerState = PLAYER_STATE_KICK;
+        }
+    }
 
     //  缶が画面下へ落ちたらゲームオーバー
     if (GameOver())
@@ -107,7 +142,27 @@ void SceneIngame::OnUpdate(GameManager* manager, float deltaTime)
     m_render->Begin();
 
     m_render->Draw("BgImg", D3D.m_screenWidth / 3.0f, cameraOffsetY, D3D.gameWidth, D3D.gameHeight);
-    m_render->Draw("PlayerImg", playerPos_x, playerPos_y, playerWidth, playerHeight);
+
+    //  プレイヤーの状態から描画する画像を切り替える
+    switch (playerState)
+    {
+    case PLAYER_STATE_IDLE:     //  待機状態
+        m_render->Draw("PlayerImg", playerPos_x, playerPos_y, playerWidth, playerHeight);
+        break;
+
+    case PLAYER_STATE_JUMP:     //  ジャンプ状態
+        m_render->Draw("PlayerJumpImg", playerPos_x, playerPos_y, playerWidth, playerHeight);
+        break;
+
+    case PLAYER_STATE_FALL:     //  落下状態
+        m_render->Draw("PlayerFallImg", playerPos_x, playerPos_y, playerWidth, playerHeight);
+        break;
+
+    case PLAYER_STATE_KICK:     //  蹴る状態
+        m_render->Draw("PlayerKickImg", playerPos_x, playerPos_y, playerWidth, playerHeight);
+        break;
+    }
+
     m_render->Draw("CanImg", canPos_x, canPos_y, canWidth, canHeight);
 
     m_render->End();
