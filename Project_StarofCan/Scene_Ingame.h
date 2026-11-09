@@ -2,6 +2,9 @@
 #include"SceneBase.h"
 #include"SpriteRender.h"
 
+#include<vector>
+#include<random>
+
 class GameManager;
 
 //  ゲーム画面
@@ -89,6 +92,40 @@ class SceneIngame :public SceneBass
 
     const float CAN_GRAVITY = 0.5f;     //  缶にかかる重力
 
+    //  ギミックの種類
+    enum GimmicKType
+    {
+        GIMMICK_DEBRI1,
+        GIMMICK_DEBRI2,
+        GIMMICK_METEO
+    };
+
+    //  ギミック情報
+    struct Gimmick
+    {
+        GimmicKType Type;   //  ギミックタイプ
+
+        float pos_x;        //  X座標
+        float altitude;     //  地面からの高度
+        float velocityY;    //  落下速度（隕石に使用）
+
+        float widht;        //  幅
+        float height;       //  高さ
+    };
+    //  ギミック管理
+    std::vector<Gimmick> gimmicks;
+
+    //  宇宙ギミックの管理
+    bool spaceGimmickInitalized = false;
+
+    //  隕石の出現間隔
+    float meteoSpawnTimer = 0.0f;
+    const float METEO_SPAUN_INTERVAL = 2.0f;
+
+    //  ランダム生成
+    std::mt19937 randomEngine{ std::random_device{}() };
+
+
 public:
     void OnEnter(GameManager* manager);
     void OnUpdate(GameManager* manager, float deltaTime);
@@ -106,6 +143,12 @@ public:
 
     float GetCanKickPowerUD(float height);   //  高度に応じた缶の蹴る力を取得
     float GtetCanKickPowerLR(float height);
+
+    //  ギミック関連関数
+    void InitalizeSpaceGimmicks();          //  ギミックの初期配置
+    void SpawnMeteo();                      //  隕石の出現
+    void UpdateGimmicks(float deltaTime);   //  ギミックの更新
+    void DrawGimmicks();                    //  ギミックの描画処理
 
     bool GameOver();
 };

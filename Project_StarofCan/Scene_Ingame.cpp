@@ -72,6 +72,11 @@ void SceneIngame::OnEnter(GameManager* manager)
     //  プレイヤー状態
     playerState = PLAYER_STATE_IDLE;
 
+    //  ギミックの初期化
+    gimmicks.clear();
+    spaceGimmickInitalized = false;
+    meteoSpawnTimer = 0.0f;
+
 }
 //  更新処理
 void SceneIngame::OnUpdate(GameManager* manager, float deltaTime)
@@ -191,6 +196,19 @@ void SceneIngame::OnUpdate(GameManager* manager, float deltaTime)
         {
             manager->ChangeState(std::make_unique<SceneResult>());
         }
+
+        //   大気圏突破判定
+        if (!spaceGimmickInitalized &&
+            totalHeight >= EARTH_TO_SPACE_HEIGHT)
+        {
+            InitalizeSpaceGimmicks();
+            spaceGimmickInitalized = true;
+        }
+        //  宇宙ギミックの更新
+        if (spaceGimmickInitalized)
+        {
+            UpdateGimmicks(deltaTime);
+        }
     }
 
     //  画像の描画
@@ -222,8 +240,13 @@ void SceneIngame::OnUpdate(GameManager* manager, float deltaTime)
 
     m_render->Draw("CanImg", canPos_x, canPos_y, canWidth, canHeight);      //  缶の描画
 
-    m_render->Draw("MeteoImg", D3D.m_screenWidth / 3.0f + (D3D.gameWidth * 0.2f), bgPosY + (BG_IMAGE_H * 0.5f), 100, 100);    //  隕石の描画
+    //  ギミックの描画
+    if (spaceGimmickInitalized)
+    {
+        DrawGimmicks();
+    }
 
+    //  スタートした時のテキストを表示
     if (!gameStart)
     {
         m_render->Draw("StartTextImg", D3D.m_screenWidth / 3.0f, D3D.gameHeight * 0.5, 400, 150);
@@ -403,6 +426,141 @@ float SceneIngame::GtetCanKickPowerLR(float height)
     }
     //  銀河系以上
     return GALAXY_KICK_POWER_LR;
+}
+
+//  宇宙ギミックの初期配置
+void SceneIngame::InitalizeSpaceGimmicks()
+{
+    //  std;;uniform_real_distrbution<float>：指定した範囲の浮動小数点数を等確率で生成
+    std::uniform_real_distribution<float> xDist(
+        D3D.m_screenWidth / 3.0f,
+        D3D.m_screenWidth / 3.0f + D3D.gameWidth - 50.0f
+    );
+
+    //  デブリをランダムで配置（現状１５個設置）
+    for (int i = 0; i < 15; ++i)
+    {
+        Gimmick gimmick;
+
+        //  ２種類をランダムに選択
+        if (i % 2 == 0)
+        {
+            gimmick.Type = GIMMICK_DEBRI1;
+        }
+        else
+        {
+            gimmick.Type = GIMMICK_DEBRI2;
+        }
+        gimmick.pos_x = xDist(randomEngine);    //  ｘ座標をランダムに
+
+        //  宇宙エリア内にランダム配置
+        std::uniform_real_distribution<float> altitudeDist(
+            EARTH_TO_SPACE_HEIGHT,
+            SPACE_TO_GALAXY_HEIGHT
+        );
+
+        gimmick.altitude = altitudeDist(randomEngine);  //  指定した範囲でランダムなｙ座標を設定
+
+        gimmick.velocityY = 0.0f;
+        gimmick.widht = 50.0f;
+        gimmick.height = 50.0f;
+    }
+}
+
+//  隕石の出現
+void SceneIngame::SpawnMeteo()
+{
+    std::uniform_real_distribution<float>xDist(
+        D3D.m_screenWidth / 3.0f,
+        D3D.m_screenWidth / 3.0f + D3D.gameWidth - 50.0f
+    );
+
+    std::uniform_real_distribution<float> speedDist(
+        200.0f,
+        350.0f
+    );
+
+    Gimmick meteo;
+
+    meteo.Type = GIMMICK_METEO;
+    meteo.pos_x = xDist(randomEngine);
+    meteo.altitude = totalHeight + D3D.gameHeight + 100.0f;     //  プレイヤーよりも高い位置に出現
+    meteo.velocityY = speedDist(randomEngine);
+    meteo.widht = 50.0f;
+    meteo.widht = 50.0f;
+
+    gimmicks.push_back(meteo);   //  末尾にmeteoを追加
+}
+
+//  ギミックの更新処理
+void SceneIngame::UpdateGimmicks(float deltaTime)
+{
+    for (auto& gimmick : gimmicks)
+    {
+        //  隕石のみ落下
+        if (gimmick.Type == GIMMICK_METEO)
+        {
+            gimmick.altitude -= gimmick.velocityY * deltaTime;
+        }
+    }
+
+    //  隕石の出現タイマー
+    meteoSpawnTimer += deltaTime;
+    if(meteoSpawnTimer >= METEO_SPAUN_INTERVAL)
+    {
+        SpawnMeteo();   //  隕石の出現
+        meteoSpawnTimer = 0.0f;    //  タイマーをリセット
+    }
+
+    //  プレイヤーから十分に離れた隕石を削除
+    for (auto it = gimmicks.begin(); it != gimmicks.end();)
+    {
+        if (it->Type == GIMMICK_METEO &&
+            it->altitude < totalHeight - D3D.gameHeight)
+        {
+            it = gimmicks.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+}
+
+//  ギミックの描画処理
+void SceneIngame::DrawGimmicks()
+{
+    float groundY = D3D.gameHeight;
+    
+    for (const auto& gimmick : gimmicks)
+    {
+        //  累計高度を基準に画面座標へ変換
+        float screenY = groundY - (gimmick.altitude - totalHeight);
+
+        //  画面外のギミックは描画しない
+        if (screenY<-gimmick.height ||
+            screenY>D3D.gameHeight)
+        {
+            continue;
+        }
+
+        switch (gimmick.Type)
+        {
+        case GIMMICK_DEBRI1:    //  デブリ１
+            m_render->Draw("Debri1Img", gimmick.pos_x, screenY, gimmick.widht, gimmick.height);
+            break;
+        case GIMMICK_DEBRI2:    //  デブリ２
+            m_render->Draw("Debri2Img", gimmick.pos_x, screenY, gimmick.widht, gimmick.height);
+            break;
+        case GIMMICK_METEO:     //  隕石
+            m_render->Draw("MeteoImg", gimmick.pos_x, screenY, gimmick.widht, gimmick.height);
+            break;
+        }
+
+
+
+
+    }
 }
 
 //  ゲームオーバー処理
