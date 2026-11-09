@@ -14,7 +14,7 @@ void SceneIngame::OnEnter(GameManager* manager)
     if (!m_render->Initialize())
         return;
 
-    m_render->LoadTexture("BgImg", L"../data/image/ingame_bg.png");    //  背景（仮）
+    m_render->LoadTexture("BgImg", L"../data/image/ingame_bg_pre.png");    //  背景（仮）
     //  プレイヤー
     m_render->LoadTexture("PlayerImg", L"../data/image/player.png");      //  待機状態画像
     m_render->LoadTexture("PlayerJumpImg", L"../data/image/player_jump.png");    //  ジャンプ状態画像
@@ -91,7 +91,8 @@ void SceneIngame::OnUpdate(GameManager* manager, float deltaTime)
         collsionDirection != -1)
     {
         //  缶を蹴り上げる処理
-        canVelocityY = CAN_KICK_POWER_UD;
+        float kickPower = GetCanKichPower(totalHeight);
+        canVelocityY = kickPower;
         kickAnimaFlame = 10;    //  蹴るアニメーションのフレーム数を設定
 
         if(collsionDirection == RIGHT)
@@ -117,10 +118,9 @@ void SceneIngame::OnUpdate(GameManager* manager, float deltaTime)
     //  上向きの速度が正なら缶は上昇、負なら落下
     canPos_y -= canVelocityY * deltaTime;
     
-    //  時間によって左右移動速度を減少させる
-    canVelocityX /= deltaTime;
+   
     //  正なら右向き、負なら左向きに移動
-    canPos_x += canVelocityX;
+    canPos_x += canVelocityX * deltaTime;
     //  画面端に行ったら跳ね返る
     if (canPos_x < D3D.m_screenWidth / 3.0f || 
         canPos_x+canWidth> D3D.m_screenWidth / 3.0f+D3D.gameWidth)
@@ -321,6 +321,26 @@ float SceneIngame::GetGravity(float height)
 
     //  銀河系以上
     return GALAXY_GRAVITY;
+}
+
+//  高度に応じた缶のけり上げる力を取得
+float SceneIngame::GetCanKichPower(float height)
+{
+    //地球から宇宙まで
+    if (height < EARTH_TO_SPACE_HEIGHT)
+    {
+        float t = height / EARTH_TO_SPACE_HEIGHT;
+
+        return EARTH_KICH_POWER + (SPACE_KICK_POWER - EARTH_KICH_POWER) * t;
+    }
+    if (height < SPACE_TO_GALAXY_HEIGHT)
+    {
+        float t = (height - EARTH_TO_SPACE_HEIGHT) /
+            (SPACE_TO_GALAXY_HEIGHT - EARTH_TO_SPACE_HEIGHT);
+
+        return SPACE_KICK_POWER + (GALAXY_KICK_POWER - SPACE_KICK_POWER) * t;
+    }
+    return GALAXY_KICK_POWER;
 }
 
 //  ゲームオーバー処理
