@@ -1,6 +1,7 @@
 #include"Scene_Result.h"
 #include"GameManager.h"
 #include"Scene_Title.h"
+#include"Scene_Ingame.h"
 #include"key.h"
 
 #include"DirectX.h"
@@ -22,6 +23,39 @@ void SceneResult::OnEnter(GameManager* manager)
 //  更新処理
 void SceneResult::OnUpdate(GameManager* manager, float deltaTime)
 {
+    //  上下キーで移動したいメニューを選択
+    if (PushHitKey(VK_UP))
+    {
+        choseMode--;
+        if (choseMode < 0)
+        {
+            choseMode = 1;
+        }
+    }
+    if (PushHitKey(VK_DOWN))
+    {
+        choseMode++;
+        if (choseMode > 1)
+        {
+            choseMode = 0;
+        }
+    }
+
+    //  エンターで移動
+    if (PushHitKey(VK_RETURN))
+    {
+        switch (choseMode)
+        {
+        case 0:     //  リトライ
+            manager->ChangeState(std::make_unique<SceneIngame>());
+            break;
+
+        case 1:     //  タイトルに戻る
+            manager->ChangeState(std::make_unique<SceneTitle>());
+            break;
+        }
+    }
+
     //  ウィンドウサイズを取得
     float screenW = static_cast<float>(D3D.m_screenWidth);
     float screenH = static_cast<float>(D3D.m_screenHeight);
@@ -32,12 +66,16 @@ void SceneResult::OnUpdate(GameManager* manager, float deltaTime)
     float buttonX = (screenW - buttonW) * 0.5f;
     float buttonY[2] = { screenH * 0.6f,screenH * 0.73f };
 
+    //  ボタンの不透明度を設定
+    float button_alpha[2] = { 0.3f,0.3f };
+    button_alpha[choseMode] = 1.0f;
+
     //  画像の描画
     m_render->Begin();
 
     m_render->Draw("BgImg",D3D.m_screenWidth / 3.0f, 0, D3D.gameWidth, D3D.gameHeight);     //  背景画像
-    m_render->Draw("RetryButton", buttonX, buttonY[0], buttonW, buttonH);                   //  リトライボタン
-    m_render->Draw("BackTitleButton", buttonX, buttonY[1], buttonW, buttonH);               //  タイトルに戻るボタン
+    m_render->Draw("RetryButton", buttonX, buttonY[0], buttonW, buttonH, button_alpha[0]);                   //  リトライボタン
+    m_render->Draw("BackTitleButton", buttonX, buttonY[1], buttonW, buttonH, button_alpha[1]);               //  タイトルに戻るボタン
 
     m_render->End();
 }
