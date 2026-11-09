@@ -23,6 +23,14 @@ void SceneIngame::OnEnter(GameManager* manager)
 
     m_render->LoadTexture("CanImg", L"../data/image/can.png");          //  缶
 
+    //  ギミック
+    m_render->LoadTexture("MeteoImg", L"../data/image/meteo.png");      //  隕石
+    m_render->LoadTexture("Debri1Img", L"../data/image/debri1.png");    //  デブリ１
+    m_render->LoadTexture("Debri2Img", L"../data/image/debri2.png");    //  デブリ２
+
+    //  その他
+    m_render->LoadTexture("StartTextImg", L"../data/image/StartText.png");  //  スタートテキスト
+
     //  サイズ設定
     //  プレイヤー
     playerWidth = PLAYER_IMAGE_W;
@@ -30,6 +38,8 @@ void SceneIngame::OnEnter(GameManager* manager)
     //  缶
     canWidth = CAN_IMAGE_W;
     canHeight = CAN_IMAGE_H;
+
+    gameStart = false;
 
     //  初期座標設定
     playerPos_x = D3D.m_screenWidth / 3.0f + (D3D.gameWidth * 0.5f);
@@ -67,95 +77,120 @@ void SceneIngame::OnEnter(GameManager* manager)
 void SceneIngame::OnUpdate(GameManager* manager, float deltaTime)
 {
     //  キー入力
-    //  移動
-    if (CheckHitKey(VK_RIGHT))   
+    if(gameStart)
     {
-        playerPos_x += PLAYERSPEEDLR;
-    }
-    if (CheckHitKey(VK_LEFT))
-    {
-        playerPos_x -= PLAYERSPEEDLR;
+        //  移動
+        if (CheckHitKey(VK_RIGHT))
+        {
+            playerPos_x += PLAYERSPEEDLR;
+        }
+        if (CheckHitKey(VK_LEFT))
+        {
+            playerPos_x -= PLAYERSPEEDLR;
+        }
+
+        if (playerPos_x < D3D.m_screenWidth / 3.0f)
+        {
+            playerPos_x = D3D.m_screenWidth / 3.0f;
+        }
+        if (playerPos_x + playerWidth > D3D.m_screenWidth / 3.0f + D3D.gameWidth)
+        {
+            playerPos_x = D3D.m_screenWidth / 3.0f + D3D.gameWidth - playerWidth;
+        }
     }
 
-    //  ジャンプ
+    //  ゲームが始まっている場合にジャンプ、始まっていなければゲーム開始
     if (PushHitKey(VK_SPACE))
     {
-        jumpSpd = JUMP_POWER;
-        isJumping = true;
-    }
-    if(isJumping) Jump(deltaTime);  //  ジャンプ処理
-
-    //  プレイヤーと缶の当たり判定
-    int collsionDirection = CheckPlayerCanCollision();
-    if (!canLaunched &&
-        collsionDirection != -1)
-    {
-        //  缶を蹴り上げる処理
-        float kickPower = GetCanKichPower(totalHeight);
-        canVelocityY = kickPower;
-        kickAnimaFlame = 10;    //  蹴るアニメーションのフレーム数を設定
-
-        if(collsionDirection == RIGHT)
+        if (!gameStart)
         {
-            canVelocityX = CAN_KICK_POWER_LR;
-        }
-        else if (collsionDirection == LEFT)
-        {
-            canVelocityX = CAN_KICK_POWER_LR * -1.0f;
-        }
-    }
-
-    //  アニメーションのフレーム数を減少させる
-    if (kickAnimaFlame > 0)
-    {
-        kickAnimaFlame--;
-    }
-
-    //  プレイヤーの累積高度に応じた重力を取得
-    float canGravity = GetGravity(totalHeight);
-    //  重力によって上昇速度を減少させる
-    canVelocityY -= canGravity * deltaTime;
-    //  上向きの速度が正なら缶は上昇、負なら落下
-    canPos_y -= canVelocityY * deltaTime;
-    
-   
-    //  正なら右向き、負なら左向きに移動
-    canPos_x += canVelocityX * deltaTime;
-    //  画面端に行ったら跳ね返る
-    if (canPos_x < D3D.m_screenWidth / 3.0f || 
-        canPos_x+canWidth> D3D.m_screenWidth / 3.0f+D3D.gameWidth)
-    {
-        canVelocityX *= -1.0f;
-    }
-
-    //  プレイヤーの状態更新（要修正）
-    if (!isJumping) //  ジャンプ中でない（地面についている）状態であれば
-    {
-        playerState = PLAYER_STATE_IDLE;
-    }
-    else
-    {
-        if (kickAnimaFlame == 0)
-        {
-            if (canVelocityY > 0.0f)
-            {
-                playerState = PLAYER_STATE_JUMP;
-            }
-            else
-            {
-                playerState = PLAYER_STATE_FALL;
-            }
+            gameStart = true;
         }
         else
         {
-            playerState = PLAYER_STATE_KICK;
+            jumpSpd = JUMP_POWER;
+            isJumping = true;
         }
     }
 
-    //  缶が画面下へ落ちたらゲームオーバー
-    if (GameOver())
+    //  ゲームが始まっている場合
+    if(gameStart)
     {
-        manager->ChangeState(std::make_unique<SceneResult>());
+        if (isJumping) Jump(deltaTime);  //  ジャンプ処理
+
+        //  プレイヤーと缶の当たり判定
+        int collsionDirection = CheckPlayerCanCollision();
+        if (!canLaunched &&
+            collsionDirection != -1)
+        {
+            //  缶を蹴り上げる処理
+            float kickPowerUD = GetCanKickPowerUD(totalHeight);
+            canVelocityY = kickPowerUD;
+            kickAnimaFlame = 10;    //  蹴るアニメーションのフレーム数を設定
+
+            float kickPowerLR = GtetCanKickPowerLR(totalHeight);
+            if (collsionDirection == RIGHT)
+            {
+                canVelocityX = kickPowerLR;
+            }
+            else if (collsionDirection == LEFT)
+            {
+                canVelocityX = kickPowerLR * -1.0f;
+            }
+        }
+
+        //  アニメーションのフレーム数を減少させる
+        if (kickAnimaFlame > 0)
+        {
+            kickAnimaFlame--;
+        }
+
+        //  プレイヤーの累積高度に応じた重力を取得
+        float canGravity = GetGravity(totalHeight);
+        //  重力によって上昇速度を減少させる
+        canVelocityY -= canGravity * deltaTime;
+        //  上向きの速度が正なら缶は上昇、負なら落下
+        canPos_y -= canVelocityY * deltaTime;
+
+
+        //  正なら右向き、負なら左向きに移動
+        canPos_x += canVelocityX * deltaTime;
+        //  画面端に行ったら跳ね返る
+        if (canPos_x < D3D.m_screenWidth / 3.0f ||
+            canPos_x + canWidth> D3D.m_screenWidth / 3.0f + D3D.gameWidth)
+        {
+            canVelocityX *= -1.0f;
+        }
+
+        //  プレイヤーの状態更新（要修正）
+        if (!isJumping) //  ジャンプ中でない（地面についている）状態であれば
+        {
+            playerState = PLAYER_STATE_IDLE;
+        }
+        else
+        {
+            if (kickAnimaFlame == 0)
+            {
+                if (canVelocityY > 0.0f)
+                {
+                    playerState = PLAYER_STATE_JUMP;
+                }
+                else
+                {
+                    playerState = PLAYER_STATE_FALL;
+                }
+            }
+            else
+            {
+                playerState = PLAYER_STATE_KICK;
+            }
+        }
+
+        //  缶が画面下へ落ちたらゲームオーバー
+        if (GameOver())
+        {
+            manager->ChangeState(std::make_unique<SceneResult>());
+        }
     }
 
     //  画像の描画
@@ -185,7 +220,14 @@ void SceneIngame::OnUpdate(GameManager* manager, float deltaTime)
         break;
     }
 
-    m_render->Draw("CanImg", canPos_x, canPos_y, canWidth, canHeight);
+    m_render->Draw("CanImg", canPos_x, canPos_y, canWidth, canHeight);      //  缶の描画
+
+    m_render->Draw("MeteoImg", D3D.m_screenWidth / 3.0f + (D3D.gameWidth * 0.2f), bgPosY + (BG_IMAGE_H * 0.5f), 100, 100);    //  隕石の描画
+
+    if (!gameStart)
+    {
+        m_render->Draw("StartTextImg", D3D.m_screenWidth / 3.0f, D3D.gameHeight * 0.5, 400, 150);
+    }
 
     m_render->End();
 }
@@ -324,23 +366,43 @@ float SceneIngame::GetGravity(float height)
 }
 
 //  高度に応じた缶のけり上げる力を取得
-float SceneIngame::GetCanKichPower(float height)
+float SceneIngame::GetCanKickPowerUD(float height)
 {
     //地球から宇宙まで
     if (height < EARTH_TO_SPACE_HEIGHT)
     {
         float t = height / EARTH_TO_SPACE_HEIGHT;
 
-        return EARTH_KICH_POWER + (SPACE_KICK_POWER - EARTH_KICH_POWER) * t;
+        return EARTH_KICH_POWER_UD + (SPACE_KICK_POWER_UD - EARTH_KICH_POWER_UD) * t;
     }
+    //  宇宙から銀河系まで
     if (height < SPACE_TO_GALAXY_HEIGHT)
     {
         float t = (height - EARTH_TO_SPACE_HEIGHT) /
             (SPACE_TO_GALAXY_HEIGHT - EARTH_TO_SPACE_HEIGHT);
 
-        return SPACE_KICK_POWER + (GALAXY_KICK_POWER - SPACE_KICK_POWER) * t;
+        return SPACE_KICK_POWER_UD + (GALAXY_KICK_POWER_UD - SPACE_KICK_POWER_UD) * t;
     }
-    return GALAXY_KICK_POWER;
+    //  銀河系以上
+    return GALAXY_KICK_POWER_UD;
+}
+float SceneIngame::GtetCanKickPowerLR(float height)
+{
+    //  地球から宇宙まで
+    if (height < EARTH_TO_SPACE_HEIGHT)
+    {
+        float t = height / EARTH_TO_SPACE_HEIGHT;
+        return EARTH_KICH_POWER_LR + (SPACE_KICK_POWER_LR - EARTH_KICH_POWER_LR) * t;
+    }
+    //  宇宙から銀河系まで
+    if (height < SPACE_TO_GALAXY_HEIGHT)
+    {
+        float t = (height - EARTH_TO_SPACE_HEIGHT) /
+            (SPACE_TO_GALAXY_HEIGHT - EARTH_TO_SPACE_HEIGHT);
+        return SPACE_KICK_POWER_LR + (GALAXY_KICK_POWER_LR - SPACE_KICK_POWER_LR) * t;
+    }
+    //  銀河系以上
+    return GALAXY_KICK_POWER_LR;
 }
 
 //  ゲームオーバー処理

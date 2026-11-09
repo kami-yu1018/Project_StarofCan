@@ -21,6 +21,8 @@ class SceneIngame :public SceneBass
     //  画像描画クラス呼び出し
     std::unique_ptr<SpriteRender>m_render;
   
+    bool gameStart = false;     //  ゲーム開始フラグ
+
     //  座標
     float playerPos_x = 0;      //  プレイヤー
     float playerPos_y = 0;
@@ -76,11 +78,14 @@ class SceneIngame :public SceneBass
     bool canLaunched = false;           //  缶が蹴られたかどうか
     
     //  缶の蹴る力
-    const float EARTH_KICH_POWER = 15.0f;
-    const float SPACE_KICK_POWER = 6.0f;
-    const float GALAXY_KICK_POWER = 2.0f;
+    const float EARTH_KICH_POWER_UD = 15.0f;
+    const float SPACE_KICK_POWER_UD = 6.0f;
+    const float GALAXY_KICK_POWER_UD = 2.0f;
 
-    const float CAN_KICK_POWER_LR = 5.0f;
+    
+    const float EARTH_KICH_POWER_LR = 5.0f;
+    const float SPACE_KICK_POWER_LR = 3.0f;
+    const float GALAXY_KICK_POWER_LR = 2.0f;
 
     const float CAN_GRAVITY = 0.5f;     //  缶にかかる重力
 
@@ -99,7 +104,8 @@ public:
     };
     int CheckPlayerCanCollision(); //  プレイヤーと缶の当たり判定
 
-    float GetCanKichPower(float height);   //  高度に応じた缶の蹴る力を取得
+    float GetCanKickPowerUD(float height);   //  高度に応じた缶の蹴る力を取得
+    float GtetCanKickPowerLR(float height);
 
     bool GameOver();
 };
